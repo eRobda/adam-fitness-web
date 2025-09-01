@@ -47,10 +47,19 @@
         .display-font { font-family: 'Space Grotesk', sans-serif; }
         .text-gradient { background: linear-gradient(135deg, #f1943a 0%, #ed7514 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .glass-effect { 
-            backdrop-filter: blur(20px); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             background: rgba(0, 0, 0, 0.3); 
             border: 1px solid rgba(255, 255, 255, 0.1); 
             transition: all 0.3s ease-in-out;
+        }
+        
+        /* Fallback for devices that don't support backdrop-filter */
+        @supports not (backdrop-filter: blur(20px)) {
+            .glass-effect {
+                background: rgba(0, 0, 0, 0.8);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
         }
         .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .card-hover:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
@@ -210,11 +219,19 @@
             animation: gradientShift 15s ease infinite;
         }
         
-        /* Parallax Effect */
-        .parallax {
-            transform: translateZ(0);
-            will-change: transform;
-        }
+                 /* Parallax Effect - Desktop only */
+         .parallax {
+             transform: translateZ(0);
+             will-change: transform;
+         }
+         
+         /* Disable parallax on mobile devices */
+         @media (max-width: 768px) {
+             .parallax {
+                 transform: none !important;
+                 will-change: auto;
+             }
+         }
         
         /* Mobile menu styles */
         .mobile-menu { 
@@ -226,11 +243,20 @@
             width: 100%;
             background: rgba(17, 24, 39, 0.95);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 40;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
             display: block;
             overflow: hidden;
+        }
+        
+        /* Fallback for mobile menu on devices without backdrop-filter support */
+        @supports not (backdrop-filter: blur(20px)) {
+            .mobile-menu {
+                background: rgba(17, 24, 39, 0.98);
+                border-top: 1px solid rgba(255, 255, 255, 0.15);
+            }
         }
         .mobile-menu.open { 
             transform: translateX(0);
@@ -269,6 +295,13 @@
         /* Optimize background image for mobile */
         @media (max-width: 768px) {
             .hero-bg { background-position: center 30% !important; }
+        }
+        
+        /* Fallback for backdrop-blur on older devices */
+        @supports not (backdrop-filter: blur(4px)) {
+            .backdrop-blur-sm {
+                background: rgba(255, 255, 255, 0.3) !important;
+            }
         }
         
         /* Scroll-triggered animations */
@@ -405,7 +438,7 @@
                     <div class="w-10 h-10 bg-primary-500 rounded-xl flex items-center justify-center">
                         <i class="fas fa-dumbbell text-white text-lg"></i>
                     </div>
-                    <span class="display-font text-xl font-bold text-white tracking-tight">FITNESS PRO</span>
+                                         <span class="display-font text-xl font-bold text-white tracking-tight">ADAM PREIS</span>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#home" class="text-white/80 hover:text-white transition-colors duration-300 font-medium">Domů</a>
@@ -824,7 +857,7 @@
                         <div class="w-10 h-10 sm:w-12 sm:h-12 bg-primary-500 rounded-xl flex items-center justify-center floating">
                             <i class="fas fa-dumbbell text-white text-lg sm:text-xl"></i>
                         </div>
-                        <span class="display-font text-xl sm:text-2xl font-bold">FITNESS PRO</span>
+                                                 <span class="display-font text-xl sm:text-2xl font-bold">ADAM PREIS</span>
                     </div>
                     <p class="text-gray-400 mb-6 leading-relaxed text-sm sm:text-base">Profesionální osobní trenér s individuálním přístupem ke každému klientovi.</p>
                     <div class="flex space-x-3 sm:space-x-4">
@@ -873,7 +906,7 @@
             </div>
             
             <div class="border-t border-gray-800 pt-6 sm:pt-8 text-center animate-on-scroll">
-                <p class="text-gray-400 font-medium text-sm sm:text-base">&copy; 2025 Fitness Pro. Všechna práva vyhrazena.</p>
+                                 <p class="text-gray-400 font-medium text-sm sm:text-base">&copy; 2025 Adam Preis. Všechna práva vyhrazena.</p>
             </div>
         </div>
     </footer>
@@ -930,19 +963,6 @@
         // Debug: Check if elements exist
         console.log('Mobile menu button:', mobileMenuBtn);
         console.log('Mobile menu:', mobileMenu);
-        
-        // Test menu toggle on page load
-        setTimeout(() => {
-            console.log('Testing menu toggle...');
-            if (mobileMenuBtn && mobileMenu) {
-                console.log('Elements found, testing toggle...');
-                mobileMenu.classList.add('open');
-                setTimeout(() => {
-                    mobileMenu.classList.remove('open');
-                    console.log('Test complete');
-                }, 1000);
-            }
-        }, 1000);
 
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1056,19 +1076,23 @@
                 });
             }
             
-            // Parallax Effect
-            initParallax() {
-                window.addEventListener('scroll', () => {
-                    const scrolled = window.pageYOffset;
-                    const parallaxElements = document.querySelectorAll('.parallax');
-                    
-                    parallaxElements.forEach(element => {
-                        const speed = 0.5;
-                        const yPos = -(scrolled * speed);
-                        element.style.transform = `translateY(${yPos}px)`;
-                    });
-                });
-            }
+                         // Parallax Effect - Desktop only, milder effect
+             initParallax() {
+                 // Only enable parallax on desktop devices
+                 if (window.innerWidth <= 768) return;
+                 
+                 window.addEventListener('scroll', () => {
+                     const scrolled = window.pageYOffset;
+                     const parallaxElements = document.querySelectorAll('.parallax');
+                     
+                     parallaxElements.forEach(element => {
+                         // Much milder parallax effect (reduced from 0.5 to 0.15)
+                         const speed = 0.15;
+                         const yPos = -(scrolled * speed);
+                         element.style.transform = `translateY(${yPos}px)`;
+                     });
+                 });
+             }
             
             // Loading Bar
             initLoadingBar() {
