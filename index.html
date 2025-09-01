@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privátní Trenér - Transformujte své tělo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'space': ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#fef7ee',
+                            100: '#fdedd6',
+                            200: '#fad7ac',
+                            300: '#f6bb77',
+                            400: '#f1943a',
+                            500: '#ed7514',
+                            600: '#de5a0a',
+                            700: '#b8440c',
+                            800: '#933612',
+                            900: '#762e12',
+                        }
+                    },
+                    letterSpacing: {
+                        'tighter': '-0.05em',
+                        'tight': '-0.025em',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #111827;
+        }
+
+        .display-font { font-family: 'Space Grotesk', sans-serif; }
+        .text-gradient { background: linear-gradient(135deg, #f1943a 0%, #ed7514 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .glass-effect { 
+            backdrop-filter: blur(20px); 
+            background: rgba(0, 0, 0, 0.3); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            transition: all 0.3s ease-in-out;
+        }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        
+        /* Mobile menu styles */
+        .mobile-menu { 
+            transform: translateX(-100%);
+            transition: all 0.3s ease-in-out;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 40;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            display: block;
+            overflow: hidden;
+        }
+        .mobile-menu.open { 
+            transform: translateX(0);
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Hide menu completely when closed */
+        .mobile-menu:not(.open) {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Ensure mobile menu is visible on mobile */
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: block !important;
+            }
+        }
+        
+        /* Additional hiding for closed menu */
+        .mobile-menu:not(.open) {
+            clip-path: inset(0 100% 0 0);
+        }
+        
+        .mobile-menu.open {
+            clip-path: inset(0 0 0 0);
+        }
+        
+        /* Touch-friendly button sizes */
+        @media (max-width: 768px) {
+            .touch-friendly { min-height: 48px; min-width: 48px; }
+        }
+        
+        /* Optimize background image for mobile */
+        @media (max-width: 768px) {
+            .hero-bg { background-position: center 30% !important; }
+        }
+    </style>
+</head>
+<body class="font-inter">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full glass-effect z-50" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-primary-500 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-dumbbell text-white text-lg"></i>
+                    </div>
+                    <span class="display-font text-xl font-bold text-white tracking-tight">FITNESS PRO</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-white/80 hover:text-white transition-colors duration-300 font-medium">Domů</a>
+                    <a href="#about" class="text-white/80 hover:text-white transition-colors duration-300 font-medium">O mně</a>
+                    <a href="#services" class="text-white/80 hover:text-white transition-colors duration-300 font-medium">Služby</a>
+                    <a href="#contact" class="bg-primary-500 hover:bg-primary-600 text-white px-6 py-2 rounded-full transition-all duration-300 font-medium">Kontakt</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobileMenuBtn" class="text-white hover:text-primary-300 touch-friendly p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu md:hidden">
+            <div class="px-4 py-6 space-y-4">
+                <a href="#home" class="block text-white/80 hover:text-primary-400 transition-colors duration-300 font-medium py-3 text-lg">Domů</a>
+                <a href="#about" class="block text-white/80 hover:text-primary-400 transition-colors duration-300 font-medium py-3 text-lg">O mně</a>
+                <a href="#services" class="block text-white/80 hover:text-primary-400 transition-colors duration-300 font-medium py-3 text-lg">Služby</a>
+                <a href="#contact" class="block bg-primary-500 text-white px-6 py-3 rounded-full transition-all duration-300 font-medium text-lg">Kontakt</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="bg-cover bg-no-repeat min-h-screen flex items-end justify-center relative pb-32 hero-bg" style="background-image: url('IMG_9594.png'); background-position: center 40%;">
+        <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60"></div>
+        <div class="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+            <h1 class="display-font text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black mb-8 tracking-tight leading-tight">
+                <span class="text-gradient">TRANSFORMUJTE</span><br>
+                <span class="text-white">SVÉ TĚLO</span>
+            </h1>
+            <p class="text-lg sm:text-xl lg:text-2xl xl:text-3xl mb-12 text-gray-200 max-w-4xl mx-auto font-light leading-relaxed">
+                Osobní trenér s <span class="text-primary-300 font-semibold">individuálním přístupem</span>. Dosáhněte svých fitness cílů s profesionálním vedením.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
+                <a href="#contact" class="group bg-primary-500 hover:bg-primary-600 text-white px-6 sm:px-10 py-4 sm:py-5 rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 flex items-center space-x-3 shadow-2xl touch-friendly w-full sm:w-auto justify-center">
+                    <i class="fas fa-calendar-check text-lg sm:text-xl"></i>
+                    <span>Rezervovat konzultaci</span>
+                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform duration-300"></i>
+                </a>
+                <a href="#about" class="glass-effect text-white px-6 sm:px-10 py-4 sm:py-5 rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 flex items-center space-x-3 touch-friendly w-full sm:w-auto justify-center">
+                    <i class="fas fa-play text-lg sm:text-xl"></i>
+                    <span>Zjistit více</span>
+                </a>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center touch-friendly">
+                <i class="fas fa-chevron-down text-white text-xl"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 sm:py-24 bg-gradient-to-br from-gray-900 to-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 sm:mb-20">
+                <span class="inline-block bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                    O MNĚ
+                </span>
+                <h2 class="display-font text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 tracking-tight text-white">
+                    PROFESIONÁLNÍ<br><span class="text-gradient">PŘÍSTUP</span>
+                </h2>
+                <p class="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">K vašemu fitness cíli s individuálním přístupem a výsledky</p>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div class="space-y-8 sm:space-y-10">
+                    <div>
+                        <h3 class="display-font text-2xl sm:text-3xl font-bold text-white mb-6 tracking-tight">Certifikovaný osobní trenér</h3>
+                        <p class="text-base sm:text-lg text-gray-300 leading-relaxed">
+                            Mám více než <span class="font-semibold text-primary-400">5 let zkušeností</span> v oblasti fitness a osobního tréninku. Specializuji se na individuální přístup ke každému klientovi, protože věřím, že každý má jiné cíle a potřeby.
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 sm:gap-8">
+                        <div class="text-center">
+                            <div class="display-font text-3xl sm:text-4xl font-black text-primary-400 mb-3">200+</div>
+                            <div class="text-gray-300 font-medium text-sm sm:text-base">Spokojených klientů</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="display-font text-3xl sm:text-4xl font-black text-primary-400 mb-3">5+</div>
+                            <div class="text-gray-300 font-medium text-sm sm:text-base">Let zkušeností</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="display-font text-3xl sm:text-4xl font-black text-primary-400 mb-3">100%</div>
+                            <div class="text-gray-300 font-medium text-sm sm:text-base">Individuální přístup</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-700">
+                        <h4 class="display-font text-lg sm:text-xl font-bold text-white mb-6 tracking-tight">Certifikace</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-center space-x-4">
+                                <div class="w-8 h-8 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-certificate text-primary-400 text-sm"></i>
+                                </div>
+                                <span class="text-gray-200 font-medium text-sm sm:text-base">Certifikovaný osobní trenér</span>
+                            </li>
+                            <li class="flex items-center space-x-4">
+                                <div class="w-8 h-8 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-certificate text-primary-400 text-sm"></i>
+                                </div>
+                                <span class="text-gray-200 font-medium text-sm sm:text-base">Výživový poradce</span>
+                            </li>
+                            <li class="flex items-center space-x-4">
+                                <div class="w-8 h-8 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-certificate text-primary-400 text-sm"></i>
+                                </div>
+                                <span class="text-gray-200 font-medium text-sm sm:text-base">Funkční trénink</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-gray-800 to-gray-700 rounded-3xl flex items-center justify-center min-h-[400px] sm:min-h-[500px] relative overflow-hidden border border-gray-600">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-transparent"></div>
+                    <div class="relative w-full h-full">
+                        <img src="IMG_9528.JPG" alt="Osobní trenér" class="w-full h-full object-cover rounded-3xl">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 sm:py-24 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 sm:mb-20">
+                <span class="inline-block bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                    SLUŽBY
+                </span>
+                <h2 class="display-font text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 tracking-tight text-white">
+                    MOJE <span class="text-gradient">SLUŽBY</span>
+                </h2>
+                <p class="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">Komplexní fitness řešení pro každého s profesionálním přístupem</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8">
+                        <i class="fas fa-dumbbell text-white text-2xl sm:text-3xl"></i>
+                    </div>
+                    <h3 class="display-font text-xl sm:text-2xl font-bold text-white mb-6 tracking-tight">Osobní trénink</h3>
+                    <p class="text-gray-300 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">Individuální tréninkové plány přizpůsobené vašim cílům a možnostem. Pravidelné sledování pokroku a úprava programu.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Individuální přístup</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Sledování pokroku</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Úprava programu</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8">
+                        <i class="fas fa-apple-alt text-white text-2xl sm:text-3xl"></i>
+                    </div>
+                    <h3 class="display-font text-xl sm:text-2xl font-bold text-white mb-6 tracking-tight">Výživové poradenství</h3>
+                    <p class="text-gray-300 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">Komplexní výživové plány podporující vaše fitness cíle. Poradenství v oblasti stravování a suplementace.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Výživové plány</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Suplementace</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Doporučení stravy</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8">
+                        <i class="fas fa-heart text-white text-2xl sm:text-3xl"></i>
+                    </div>
+                    <h3 class="display-font text-xl sm:text-2xl font-bold text-white mb-6 tracking-tight">Online koučování</h3>
+                    <p class="text-gray-300 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">Flexibilní online tréninky a konzultace. Ideální pro zaneprázdněné lidi, kteří chtějí trénovat z pohodlí domova.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Online tréninky</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Video konzultace</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Flexibilní rozvrh</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 sm:py-24 bg-gradient-to-br from-gray-800 to-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 sm:mb-20">
+                <span class="inline-block bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                    REFERENCE
+                </span>
+                <h2 class="display-font text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 tracking-tight text-white">
+                    CO ŘÍKAJÍ <span class="text-gradient">KLIENTI</span>
+                </h2>
+                <p class="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">Skutečné výsledky a spokojenost mých klientů</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700">
+                    <div class="mb-6 sm:mb-8">
+                        <div class="flex text-primary-400 mb-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-gray-300 italic text-base sm:text-lg leading-relaxed">"Díky osobnímu přístupu jsem dosáhl svých cílů rychleji, než jsem čekal. Profesionální a motivující přístup!"</p>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-white text-lg sm:text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="display-font font-bold text-white text-base sm:text-lg">Petr Novák</h4>
+                            <span class="text-gray-400 font-medium text-sm sm:text-base">Klient 2 roky</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700">
+                    <div class="mb-6 sm:mb-8">
+                        <div class="flex text-primary-400 mb-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-gray-300 italic text-base sm:text-lg leading-relaxed">"Konečně jsem našla trenéra, který rozumí mým potřebám. Výsledky jsou viditelné už po prvním měsíci!"</p>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-white text-lg sm:text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="display-font font-bold text-white text-base sm:text-lg">Marie Svobodová</h4>
+                            <span class="text-gray-400 font-medium text-sm sm:text-base">Klientka 1 rok</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700">
+                    <div class="mb-6 sm:mb-8">
+                        <div class="flex text-primary-400 mb-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-gray-300 italic text-base sm:text-lg leading-relaxed">"Online koučování mi perfektně vyhovuje. Flexibilní rozvrh a stejně kvalitní výsledky jako při osobních trénincích."</p>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-white text-lg sm:text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="display-font font-bold text-white text-base sm:text-lg">Jan Dvořák</h4>
+                            <span class="text-gray-400 font-medium text-sm sm:text-base">Online klient</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 sm:py-24 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 sm:mb-20">
+                <span class="inline-block bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                    KONTAKT
+                </span>
+                <h2 class="display-font text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 tracking-tight text-white">
+                    KONTAKTUJTE <span class="text-gradient">MĚ</span>
+                </h2>
+                <p class="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">Začněte svou fitness cestu ještě dnes s profesionálním vedením</p>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16">
+                <div class="space-y-8 sm:space-y-10">
+                    <div class="flex items-start space-x-4 sm:space-x-6">
+                        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-phone text-white text-lg sm:text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="display-font font-bold text-white text-lg sm:text-xl mb-2">Telefon</h4>
+                            <p class="text-gray-300 text-base sm:text-lg">+420 123 456 789</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4 sm:space-x-6">
+                        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-envelope text-white text-lg sm:text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="display-font font-bold text-white text-lg sm:text-xl mb-2">Email</h4>
+                            <p class="text-gray-300 text-base sm:text-lg">trener@fitnesspro.cz</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4 sm:space-x-6">
+                        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-map-marker-alt text-white text-lg sm:text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="display-font font-bold text-white text-lg sm:text-xl mb-2">Lokalita</h4>
+                            <p class="text-gray-300 text-base sm:text-lg">Praha, Česká republika</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4 sm:space-x-6">
+                        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-clock text-white text-lg sm:text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="display-font font-bold text-white text-lg sm:text-xl mb-2">Dostupnost</h4>
+                            <p class="text-gray-300 text-base sm:text-lg">Po-Pá: 6:00 - 22:00<br>So-Ne: 8:00 - 18:00</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-3xl p-6 sm:p-10 shadow-2xl border border-gray-700">
+                    <form id="contactForm" class="space-y-4 sm:space-y-6">
+                        <div>
+                            <input type="text" id="name" name="name" placeholder="Vaše jméno" required 
+                                   class="w-full px-4 sm:px-6 py-3 sm:py-4 border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base sm:text-lg transition-all duration-300 touch-friendly">
+                        </div>
+                        <div>
+                            <input type="email" id="email" name="email" placeholder="Váš email" required 
+                                   class="w-full px-4 sm:px-6 py-3 sm:py-4 border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base sm:text-lg transition-all duration-300 touch-friendly">
+                        </div>
+                        <div>
+                            <input type="tel" id="phone" name="phone" placeholder="Váš telefon" 
+                                   class="w-full px-4 sm:px-6 py-3 sm:py-4 border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base sm:text-lg transition-all duration-300 touch-friendly">
+                        </div>
+                        <div>
+                            <select id="service" name="service" required 
+                                    class="w-full px-4 sm:px-6 py-3 sm:py-4 border border-gray-600 bg-gray-700 text-white rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base sm:text-lg transition-all duration-300 touch-friendly">
+                                <option value="" class="bg-gray-700 text-white">Vyberte službu</option>
+                                <option value="personal" class="bg-gray-700 text-white">Osobní trénink</option>
+                                <option value="nutrition" class="bg-gray-700 text-white">Výživové poradenství</option>
+                                <option value="online" class="bg-gray-700 text-white">Online koučování</option>
+                            </select>
+                        </div>
+                        <div>
+                            <textarea id="message" name="message" placeholder="Vaše zpráva" rows="4" 
+                                      class="w-full px-4 sm:px-6 py-3 sm:py-4 border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base sm:text-lg transition-all duration-300 touch-friendly"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white py-4 sm:py-5 rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3 shadow-2xl touch-friendly">
+                            <i class="fas fa-paper-plane text-lg sm:text-xl"></i>
+                            <span>Odeslat zprávu</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 mb-8 sm:mb-12">
+                <div>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-primary-500 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-dumbbell text-white text-lg sm:text-xl"></i>
+                        </div>
+                        <span class="display-font text-xl sm:text-2xl font-bold">FITNESS PRO</span>
+                    </div>
+                    <p class="text-gray-400 mb-6 leading-relaxed text-sm sm:text-base">Profesionální osobní trenér s individuálním přístupem ke každému klientovi.</p>
+                    <div class="flex space-x-3 sm:space-x-4">
+                        <a href="#" class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-900 rounded-xl flex items-center justify-center text-gray-400 hover:text-primary-400 hover:bg-gray-800 transition-all duration-300 touch-friendly">
+                            <i class="fab fa-facebook text-lg sm:text-xl"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-900 rounded-xl flex items-center justify-center text-gray-400 hover:text-primary-400 hover:bg-gray-800 transition-all duration-300 touch-friendly">
+                            <i class="fab fa-instagram text-lg sm:text-xl"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-900 rounded-xl flex items-center justify-center text-gray-400 hover:text-primary-400 hover:bg-gray-800 transition-all duration-300 touch-friendly">
+                            <i class="fab fa-youtube text-lg sm:text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="display-font text-lg sm:text-xl font-bold mb-6">Rychlé odkazy</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base">Domů</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base">O mně</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base">Služby</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base">Kontakt</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="display-font text-lg sm:text-xl font-bold mb-6">Služby</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base">Osobní trénink</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base">Výživové poradenství</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base">Online koučování</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="display-font text-lg sm:text-xl font-bold mb-6">Kontakt</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-center space-x-3">
+                            <i class="fas fa-phone text-primary-400"></i>
+                            <span class="text-gray-400 font-medium text-sm sm:text-base">+420 123 456 789</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fas fa-envelope text-primary-400"></i>
+                            <span class="text-gray-400 font-medium text-sm sm:text-base">trener@fitnesspro.cz</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fas fa-map-marker-alt text-primary-400"></i>
+                            <span class="text-gray-400 font-medium text-sm sm:text-base">Praha, ČR</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-6 sm:pt-8 text-center">
+                <p class="text-gray-400 font-medium text-sm sm:text-base">&copy; 2024 Fitness Pro. Všechna práva vyhrazena.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        let isMenuOpen = false;
+
+        // Add both click and touch events
+        const toggleMenu = function(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.add('open');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-times text-xl"></i>';
+                console.log('Menu opened');
+            } else {
+                mobileMenu.classList.remove('open');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-xl"></i>';
+                console.log('Menu closed');
+            }
+        };
+
+        // Add multiple event listeners for better mobile support
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+        mobileMenuBtn.addEventListener('touchend', toggleMenu);
+        mobileMenuBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.remove('open');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-xl"></i>';
+                isMenuOpen = false;
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!mobileMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                mobileMenu.classList.remove('open');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-xl"></i>';
+                isMenuOpen = false;
+            }
+        });
+
+        // Debug: Check if elements exist
+        console.log('Mobile menu button:', mobileMenuBtn);
+        console.log('Mobile menu:', mobileMenu);
+        
+        // Test menu toggle on page load
+        setTimeout(() => {
+            console.log('Testing menu toggle...');
+            if (mobileMenuBtn && mobileMenu) {
+                console.log('Elements found, testing toggle...');
+                mobileMenu.classList.add('open');
+                setTimeout(() => {
+                    mobileMenu.classList.remove('open');
+                    console.log('Test complete');
+                }, 1000);
+            }
+        }, 1000);
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Děkujeme za vaši zprávu! Budeme vás kontaktovat co nejdříve.');
+            this.reset();
+        });
+
+        // Navbar background on scroll - keep glass effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            const scrollY = window.scrollY;
+            
+            // Always keep the glass effect, just adjust opacity slightly for better readability
+            if (scrollY > 50) {
+                // Slightly more opaque when scrolled for better text readability
+                navbar.style.background = 'rgba(255, 255, 255, 0.18)';
+                navbar.style.backdropFilter = 'blur(25px)';
+                navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.3)';
+            } else {
+                // More transparent when at top
+                navbar.style.background = 'rgba(255, 255, 255, 0.1)';
+                navbar.style.backdropFilter = 'blur(20px)';
+                navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.2)';
+            }
+        });
+
+        // Touch-friendly interactions for mobile
+        if ('ontouchstart' in window) {
+            document.querySelectorAll('.touch-friendly').forEach(element => {
+                element.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                element.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            });
+        }
+    </script>
+</body>
+</html>
