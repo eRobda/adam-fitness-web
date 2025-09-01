@@ -508,9 +508,9 @@
     <section id="about" class="py-16 sm:py-24 bg-gradient-to-br from-gray-900 to-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 sm:mb-20 animate-on-scroll">
-                <span class="inline-block bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-semibold mb-6 floating">
-                    O MNĚ
-                </span>
+                                 <span class="inline-block bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                     O MNĚ
+                 </span>
                 <h2 class="display-font text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 tracking-tight text-white">
                     PROFESIONÁLNÍ<br><span class="text-gradient">PŘÍSTUP</span>
                 </h2>
@@ -578,9 +578,9 @@
     <section id="services" class="py-16 sm:py-24 bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 sm:mb-20 animate-on-scroll">
-                <span class="inline-block bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-semibold mb-6 floating">
-                    SLUŽBY
-                </span>
+                                 <span class="inline-block bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                     SLUŽBY
+                 </span>
                 <h2 class="display-font text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 tracking-tight text-white">
                     MOJE <span class="text-gradient">SLUŽBY</span>
                 </h2>
@@ -616,9 +616,9 @@
                 </div>
                 
                 <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700 service-card animate-on-scroll">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8 floating">
-                        <i class="fas fa-apple-alt text-white text-2xl sm:text-3xl"></i>
-                    </div>
+                                         <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8">
+                         <i class="fas fa-apple-alt text-white text-2xl sm:text-3xl"></i>
+                     </div>
                     <h3 class="display-font text-xl sm:text-2xl font-bold text-white mb-6 tracking-tight">Výživové poradenství</h3>
                     <p class="text-gray-300 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">Komplexní výživové plány podporující vaše fitness cíle. Poradenství v oblasti stravování a suplementace.</p>
                     <ul class="space-y-3">
@@ -678,9 +678,9 @@
     <section class="py-16 sm:py-24 bg-gradient-to-br from-gray-800 to-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 sm:mb-20 animate-on-scroll">
-                <span class="inline-block bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-semibold mb-6 floating">
-                    REFERENCE
-                </span>
+                                 <span class="inline-block bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                     REFERENCE
+                 </span>
                 <h2 class="display-font text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 tracking-tight text-white">
                     CO ŘÍKAJÍ <span class="text-gradient">KLIENTI</span>
                 </h2>
@@ -760,9 +760,9 @@
     <section id="contact" class="py-16 sm:py-24 bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 sm:mb-20 animate-on-scroll">
-                <span class="inline-block bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-semibold mb-6 floating">
-                    KONTAKT
-                </span>
+                                 <span class="inline-block bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                     KONTAKT
+                 </span>
                 <h2 class="display-font text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 tracking-tight text-white">
                     KONTAKTUJTE <span class="text-gradient">MĚ</span>
                 </h2>
@@ -1158,39 +1158,45 @@
             });
         });
         
-        // Stats counter animation
-        const animateStats = () => {
-            const statsNumbers = document.querySelectorAll('.stats-number');
-            
-            statsNumbers.forEach(stat => {
-                const target = parseInt(stat.textContent);
-                const increment = target / 50;
-                let current = 0;
-                
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(timer);
-                    }
-                    stat.textContent = Math.floor(current) + (stat.textContent.includes('+') ? '+' : '') + (stat.textContent.includes('%') ? '%' : '');
-                }, 50);
-            });
-        };
-        
-        // Trigger stats animation when about section is visible
-        const aboutSection = document.getElementById('about');
-        if (aboutSection) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        animateStats();
-                        observer.unobserve(entry.target);
-                    }
-                });
-            });
-            observer.observe(aboutSection);
-        }
+                 // Stats counter animation
+         const animateStats = () => {
+             const statsNumbers = document.querySelectorAll('.stats-number');
+             
+             statsNumbers.forEach(stat => {
+                 const target = parseInt(stat.textContent);
+                 const increment = target / 50;
+                 let current = 0;
+                 
+                 const timer = setInterval(() => {
+                     current += increment;
+                     if (current >= target) {
+                         current = target;
+                         clearInterval(timer);
+                     }
+                     stat.textContent = Math.floor(current) + (stat.textContent.includes('+') ? '+' : '') + (stat.textContent.includes('%') ? '%' : '');
+                 }, 50);
+             });
+         };
+         
+         // Trigger stats animation when about section is visible
+         const aboutSection = document.getElementById('about');
+         if (aboutSection) {
+             const observer = new IntersectionObserver((entries) => {
+                 entries.forEach(entry => {
+                     if (entry.isIntersecting) {
+                         // Add a small delay to ensure the section is fully visible
+                         setTimeout(() => {
+                             animateStats();
+                         }, 300);
+                         observer.unobserve(entry.target);
+                     }
+                 });
+             }, {
+                 threshold: 0.3, // Trigger when 30% of the section is visible
+                 rootMargin: '0px 0px -100px 0px' // Start animation slightly before the section is fully in view
+             });
+             observer.observe(aboutSection);
+         }
         
         // Enhanced form interactions
         document.querySelectorAll('.contact-input').forEach(input => {
