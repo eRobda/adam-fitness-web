@@ -811,8 +811,8 @@
                     </div>
                 </div>
                 
-                <div class="bg-gray-800 rounded-3xl p-6 sm:p-10 shadow-2xl border border-gray-700 animate-on-scroll">
-                    <form id="contactForm" class="space-y-4 sm:space-y-6">
+                <div class="bg-gray-800 rounded-3xl p-6 sm:px-10 shadow-2xl border border-gray-700 animate-on-scroll">
+                    <form id="contactForm" action="process_contact.php" method="POST" class="space-y-4 sm:space-y-6">
                         <div>
                             <input type="text" id="name" name="name" placeholder="Vaše jméno" required 
                                    class="w-full px-4 sm:px-6 py-3 sm:py-4 border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base sm:text-lg transition-all duration-300 touch-friendly contact-input">
@@ -911,6 +911,43 @@
         </div>
     </footer>
 
+    <?php
+    // Sledování návštěv
+    require_once 'track_visit.php';
+    
+    // Databázové připojení pro sledování
+    $db_config = [
+        'host' => '92.113.22.82',
+        'dbname' => 'u498377835_adampreis',
+        'username' => 'u498377835_adampreis',
+        'password' => 'AdamPosilko67.'
+    ];
+    
+    try {
+        $pdo = new PDO(
+            "mysql:host={$db_config['host']};dbname={$db_config['dbname']};charset=utf8mb4",
+            $db_config['username'],
+            $db_config['password'],
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false
+            ]
+        );
+        
+        // Sledování návštěvy hlavní stránky
+        trackVisit($pdo, 'main_page');
+        
+        // Aktualizace statistik
+        updateDailyStats($pdo);
+        updateMonthlyStats($pdo);
+        
+    } catch (Exception $e) {
+        // Tichá chyba - nechceme přerušit zobrazení stránky
+        error_log("Chyba při sledování návštěvy: " . $e->getMessage());
+    }
+    ?>
+    
     <script>
         // Mobile menu functionality
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -981,8 +1018,39 @@
         // Form submission
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Děkujeme za vaši zprávu! Budeme vás kontaktovat co nejdříve.');
-            this.reset();
+            
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Zobrazení loading stavu
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Odesílám...';
+            submitBtn.disabled = true;
+            
+            fetch('process_contact.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Úspěch
+                    alert(data.message);
+                    this.reset();
+                } else {
+                    // Chyba
+                    alert('Chyba: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Došlo k chybě při odesílání. Zkuste to prosím znovu.');
+            })
+            .finally(() => {
+                // Obnovení původního stavu tlačítka
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
         });
 
         // Navbar background on scroll - keep glass effect

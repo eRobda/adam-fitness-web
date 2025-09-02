@@ -1,0 +1,28 @@
+{
+  "name": "Adam Preis Dashboard",
+  "short_name": "AP Dashboard",
+  "description": "Admin dashboard pro správu webu Adama Preise",
+  "start_url": "/dashboard/dashboard.php",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#ed7a1a",
+  "orientation": "portrait-primary",
+  "scope": "/dashboard/",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiNlZDdhMWEiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSI+CjxwYXRoIGQ9Ik0yMC41NyAxNC4wN0wxOC4xMiAxMS42MkwyMC41NyA5LjE3TDE4LjEyIDYuNzJMMTUuNjcgOS4xN0wxMy4yMiA2LjcyTDEwLjc3IDkuMTdMMy4yMiAxNi43MkwyLjUgMTcuNDRMMy4yMiAxOC4xNkwxMC43NyAyNS43MUwxMy4yMiAyMy4yNkwxNS42NyAyNS43MUwxOC4xMiAyMy4yNkwyMC41NyAyNS43MUwyMi4wMiAyNC4yNkwxOS41NyAyMS44MUwyMi4wMiAxOS4zNkwyMC41NyAxNy45MUwyMi4wMiAxNi40NkwyMC41NyAxNC4wN1oiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo8L3N2Zz4K",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iNjQiIGZpbGw9IiNlZDdhMWEiLz4KPHN2ZyB4PSIxMjgiIHk9IjEyOCIgd2lkdGg9IjI1NiIgaGVpZ2h0PSIyNTYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPgo8cGF0aCBkPSJNMjAuNTcgMTQuMDdMMTguMTIgMTEuNjJMMjAuNTcgOS4xN0wxOC4xMiA2LjcyTDE1LjY3IDkuMTdMMTMuMjIgNi43MkwxMC43NyA5LjE3TDMuMjIgMTYuNzJMMi41IDE3LjQ0TDMuMjIgMTguMTZMMTAuNzcgMjUuNzFMMTMuMjIgMjMuMjZMMTUuNjcgMjUuNzFMMTguMTIgMjMuMjZMMjAuNTcgMjUuNzFMMjIuMDIgMjQuMjZMMTkuNTcgMjEuODFMMjIuMDIgMTkuMzZMMjAuNTcgMTcuOTFMMjIuMDIgMTYuNDZMMjAuNTcgMTQuMDdaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4KPC9zdmc+Cg==",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "cs",
+  "dir": "ltr"
+}
