@@ -1,3 +1,39 @@
+<?php
+// Sledování návštěv
+require_once 'track_visit.php';
+
+// Databázové připojení pro sledování
+$db_config = [
+    'host' => '92.113.22.82',
+    'dbname' => 'u498377835_adampreis',
+    'username' => 'u498377835_adampreis',
+    'password' => 'AdamPosilko67.'
+];
+
+try {
+    $pdo = new PDO(
+        "mysql:host={$db_config['host']};dbname={$db_config['dbname']};charset=utf8mb4",
+        $db_config['username'],
+        $db_config['password'],
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ]
+    );
+    
+    // Sledování návštěvy hlavní stránky
+    trackVisit($pdo, 'main_page');
+    
+    // Aktualizace statistik
+    updateDailyStats($pdo);
+    updateMonthlyStats($pdo);
+    
+} catch (Exception $e) {
+    // Tichá chyba - nechceme přerušit zobrazení stránky
+    error_log("Chyba při sledování návštěvy: " . $e->getMessage());
+}
+?>
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -547,11 +583,11 @@
                     
                     <div class="grid grid-cols-3 gap-4 sm:gap-8">
                         <div class="text-center">
-                            <div class="display-font text-3xl sm:text-4xl font-black text-primary-400 mb-3 stats-number">20+</div>
+                            <div class="display-font text-3xl sm:text-4xl font-black text-primary-400 mb-3 stats-number">30+</div>
                             <div class="text-gray-300 font-medium text-sm sm:text-base">Spokojených klientů</div>
                         </div>
                         <div class="text-center">
-                            <div class="display-font text-3xl sm:text-4xl font-black text-primary-400 mb-3 stats-number">5+</div>
+                            <div class="display-font text-3xl sm:text-4xl font-black text-primary-400 mb-3 stats-number">6+</div>
                             <div class="text-gray-300 font-medium text-sm sm:text-base">Let zkušeností</div>
                         </div>
                         <div class="text-center">
@@ -577,7 +613,7 @@
                                 <div class="w-8 h-8 bg-primary-500/20 rounded-full flex items-center justify-center">
                                     <i class="fas fa-certificate text-primary-400 text-sm"></i>
                                 </div>
-                                <span class="text-gray-200 font-medium text-sm sm:text-base">Profesionální osobní trenér</span>
+                                <span class="text-gray-200 font-medium text-sm sm:text-base">Osobní trenér</span>
                             </li>
                             <li class="flex items-center space-x-4">
                                 <div class="w-8 h-8 bg-primary-500/20 rounded-full flex items-center justify-center floating-delay-1">
@@ -589,7 +625,7 @@
                                 <div class="w-8 h-8 bg-primary-500/20 rounded-full flex items-center justify-center floating-delay-2">
                                     <i class="fas fa-certificate text-primary-400 text-sm"></i>
                                 </div>
-                                <span class="text-gray-200 font-medium text-sm sm:text-base">Funkční trénink</span>
+                                <span class="text-gray-200 font-medium text-sm sm:text-base">Silový trénink</span>
                             </li>
                         </ul>
                     </div>
@@ -611,12 +647,18 @@
                 <p class="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">Komplexní fitness řešení pro každého s profesionálním přístupem</p>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700 service-card animate-on-scroll">
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700 service-card animate-on-scroll flex flex-col">
                     <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8">
                         <i class="fas fa-dumbbell text-white text-2xl sm:text-3xl"></i>
                     </div>
                     <h3 class="display-font text-xl sm:text-2xl font-bold text-white mb-6 tracking-tight">Osobní trénink</h3>
-                    <p class="text-gray-300 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">Individuální tréninkové plány přizpůsobené vašim cílům a možnostem. Pravidelné sledování pokroku a úprava programu.</p>
+                    <p class="text-gray-300 mb-4 leading-relaxed text-sm sm:text-base flex-grow">Individuální trénink pod mým vedením, kde se zaměříme na tvé cíle. Zkontrolujeme tvoji techniku a zoptimalizujeme trénink přímo pro tebe.</p>
+                    <div class="bg-primary-500/20 rounded-2xl p-4 mb-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-primary-400">300,-</div>
+                            <div class="text-sm text-gray-300">Kč</div>
+                        </div>
+                    </div>
                     <ul class="space-y-3">
                         <li class="flex items-center space-x-3">
                             <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
@@ -628,29 +670,75 @@
                             <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
                                 <i class="fas fa-check text-primary-400 text-xs"></i>
                             </div>
-                            <span class="text-gray-200 font-medium text-sm sm:text-base">Sledování pokroku</span>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Kontrola techniky</span>
                         </li>
                         <li class="flex items-center space-x-3">
                             <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
                                 <i class="fas fa-check text-primary-400 text-xs"></i>
                             </div>
-                            <span class="text-gray-200 font-medium text-sm sm:text-base">Úprava programu</span>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Fitness centrum</span>
                         </li>
                     </ul>
                 </div>
                 
-                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700 service-card animate-on-scroll">
-                                         <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8">
-                         <i class="fas fa-apple-alt text-white text-2xl sm:text-3xl"></i>
-                     </div>
-                    <h3 class="display-font text-xl sm:text-2xl font-bold text-white mb-6 tracking-tight">Výživové poradenství</h3>
-                    <p class="text-gray-300 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">Komplexní výživové plány podporující vaše fitness cíle. Poradenství v oblasti stravování a suplementace.</p>
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700 service-card animate-on-scroll flex flex-col">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8">
+                        <i class="fas fa-clipboard-list text-white text-2xl sm:text-3xl"></i>
+                    </div>
+                    <h3 class="display-font text-xl sm:text-2xl font-bold text-white mb-6 tracking-tight">Tréninkový plán</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed text-sm sm:text-base flex-grow">Tréninkový plán bude vytvořený přímo pro tebe, podle tvých potřeb a cílů. Bude nastavený tak, aby tě především bavil a dovedl k nejlepším výsledkům.</p>
+                    <div class="bg-primary-500/20 rounded-2xl p-4 mb-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-primary-400">1000,-</div>
+                            <div class="text-sm text-gray-300">Kč</div>
+                        </div>
+                    </div>
                     <ul class="space-y-3">
                         <li class="flex items-center space-x-3">
                             <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
                                 <i class="fas fa-check text-primary-400 text-xs"></i>
                             </div>
-                            <span class="text-gray-200 font-medium text-sm sm:text-base">Výživové plány</span>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Na míru</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Individuální délka</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Zábavný trénink</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700 service-card animate-on-scroll flex flex-col">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8">
+                        <i class="fas fa-apple-alt text-white text-2xl sm:text-3xl"></i>
+                    </div>
+                    <h3 class="display-font text-xl sm:text-2xl font-bold text-white mb-6 tracking-tight">Jídelní plán</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed text-sm sm:text-base flex-grow">Sestavím ti jídelní plán na míru, přizpůsobený tobě. Zaměřím se na tvůj cíl a přidám doporučení k suplementaci.</p>
+                    <div class="bg-primary-500/20 rounded-2xl p-4 mb-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-primary-400">1000,-</div>
+                            <div class="text-sm text-gray-300">Kč</div>
+                        </div>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Na míru</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Týdenní úpravy</span>
                         </li>
                         <li class="flex items-center space-x-3">
                             <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
@@ -658,39 +746,107 @@
                             </div>
                             <span class="text-gray-200 font-medium text-sm sm:text-base">Suplementace</span>
                         </li>
-                        <li class="flex items-center space-x-3">
-                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
-                                <i class="fas fa-check text-primary-400 text-xs"></i>
-                            </div>
-                            <span class="text-gray-200 font-medium text-sm sm:text-base">Doporučení stravy</span>
-                        </li>
                     </ul>
                 </div>
                 
-                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700 service-card animate-on-scroll">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8 floating-delay-1">
-                        <i class="fas fa-heart text-white text-2xl sm:text-3xl"></i>
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700 service-card animate-on-scroll flex flex-col">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8">
+                        <i class="fas fa-users text-white text-2xl sm:text-3xl"></i>
                     </div>
-                    <h3 class="display-font text-xl sm:text-2xl font-bold text-white mb-6 tracking-tight">Online koučování</h3>
-                    <p class="text-gray-300 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">Flexibilní online tréninky a konzultace. Ideální pro zaneprázdněné lidi, kteří chtějí trénovat z pohodlí domova.</p>
+                    <h3 class="display-font text-xl sm:text-2xl font-bold text-white mb-6 tracking-tight">Coaching</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed text-sm sm:text-base flex-grow">Spolupráce, ve které ti sestavím tréninkový plán a jídelníček přizpůsobený tvému cíli. Každotýdenní kontroly a konzultace.</p>
+                    <div class="bg-primary-500/20 rounded-2xl p-4 mb-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-primary-400">1500,-</div>
+                            <div class="text-sm text-gray-300">Kč</div>
+                        </div>
+                    </div>
                     <ul class="space-y-3">
                         <li class="flex items-center space-x-3">
                             <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
                                 <i class="fas fa-check text-primary-400 text-xs"></i>
                             </div>
-                            <span class="text-gray-200 font-medium text-sm sm:text-base">Online tréninky</span>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Kompletní plán</span>
                         </li>
                         <li class="flex items-center space-x-3">
                             <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
                                 <i class="fas fa-check text-primary-400 text-xs"></i>
                             </div>
-                            <span class="text-gray-200 font-medium text-sm sm:text-base">Video konzultace</span>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">24/7 podpora</span>
                         </li>
                         <li class="flex items-center space-x-3">
                             <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
                                 <i class="fas fa-check text-primary-400 text-xs"></i>
                             </div>
-                            <span class="text-gray-200 font-medium text-sm sm:text-base">Flexibilní rozvrh</span>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Týdenní kontroly</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700 service-card animate-on-scroll flex flex-col">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8">
+                        <i class="fas fa-trophy text-white text-2xl sm:text-3xl"></i>
+                    </div>
+                    <h3 class="display-font text-xl sm:text-2xl font-bold text-white mb-6 tracking-tight">Příprava na závody</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed text-sm sm:text-base flex-grow">Připravím tě na závody v silovém trojboji. Příprava zahrnuje tréninkový plán, jídelníček i osobní tréninky.</p>
+                    <div class="bg-primary-500/20 rounded-2xl p-4 mb-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-primary-400">1500,-</div>
+                            <div class="text-sm text-gray-300">Kč</div>
+                        </div>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Silový trojboj</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Kompletní příprava</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">24/7 k dispozici</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700 service-card animate-on-scroll flex flex-col">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 sm:mb-8">
+                        <i class="fas fa-comments text-white text-2xl sm:text-3xl"></i>
+                    </div>
+                    <h3 class="display-font text-xl sm:text-2xl font-bold text-white mb-6 tracking-tight">Konzultace</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed text-sm sm:text-base flex-grow">Potřebuješ poradit ať už ve výživě nebo tréninku? Můžeme se setkat a nebo vše vyřešit online.</p>
+                    <div class="bg-primary-500/20 rounded-2xl p-4 mb-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-primary-400">250,-</div>
+                            <div class="text-sm text-gray-300">Kč</div>
+                        </div>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Výživa i trénink</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Osobně i online</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-primary-400 text-xs"></i>
+                            </div>
+                            <span class="text-gray-200 font-medium text-sm sm:text-base">Individuální čas</span>
                         </li>
                     </ul>
                 </div>
@@ -824,15 +980,7 @@
                         </div>
                     </div>
                     
-                    <div class="flex items-start space-x-4 sm:space-x-6">
-                        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-clock text-white text-lg sm:text-2xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="display-font font-bold text-white text-lg sm:text-xl mb-2">Dostupnost</h4>
-                            <p class="text-gray-300 text-base sm:text-lg">Po-Pá: 6:00 - 22:00<br>So-Ne: 8:00 - 18:00</p>
-                        </div>
-                    </div>
+
                 </div>
                 
                 <div class="bg-gray-800 rounded-3xl p-6 sm:px-10 shadow-2xl border border-gray-700 animate-on-scroll">
@@ -853,9 +1001,12 @@
                             <select id="service" name="service" required 
                                     class="w-full px-4 sm:px-6 py-3 sm:py-4 border border-gray-600 bg-gray-700 text-white rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base sm:text-lg transition-all duration-300 touch-friendly contact-input">
                                 <option value="" class="bg-gray-700 text-white">Vyberte službu</option>
-                                <option value="personal" class="bg-gray-700 text-white">Osobní trénink</option>
-                                <option value="nutrition" class="bg-gray-700 text-white">Výživové poradenství</option>
-                                <option value="online" class="bg-gray-700 text-white">Online koučování</option>
+                                <option value="personal" class="bg-gray-700 text-white">Osobní trénink - 300,- Kč</option>
+                                <option value="training_plan" class="bg-gray-700 text-white">Tréninkový plán - 1000,- Kč</option>
+                                <option value="meal_plan" class="bg-gray-700 text-white">Jídelní plán - 1000,- Kč</option>
+                                <option value="coaching" class="bg-gray-700 text-white">Coaching - 1500,- Kč</option>
+                                <option value="competition" class="bg-gray-700 text-white">Příprava na závody - 1500,- Kč</option>
+                                <option value="consultation" class="bg-gray-700 text-white">Konzultace - 250,- Kč</option>
                             </select>
                         </div>
                         <div>
@@ -878,12 +1029,12 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 mb-8 sm:mb-12">
                 <div class="animate-on-scroll">
                     <div class="flex items-center space-x-3 mb-6">
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-primary-500 rounded-xl flex items-center justify-center floating">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-primary-500 rounded-xl flex items-center justify-center">
                             <i class="fas fa-dumbbell text-white text-lg sm:text-xl"></i>
                         </div>
                                                  <span class="display-font text-xl sm:text-2xl font-bold">ADAM PREIS</span>
                     </div>
-                    <p class="text-gray-400 mb-6 leading-relaxed text-sm sm:text-base">Profesionální osobní trenér s individuálním přístupem ke každému klientovi.</p>
+                    <p class="text-gray-400 mb-6 leading-relaxed text-sm sm:text-base">Osobní trenér s individuálním přístupem ke každému klientovi.</p>
                     <div class="flex space-x-3 sm:space-x-4">
                         <a href="https://www.instagram.com/adam.preis/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-900 rounded-xl flex items-center justify-center text-gray-400 hover:text-primary-400 hover:bg-gray-800 transition-all duration-300 touch-friendly btn-premium">
                             <i class="fab fa-instagram text-lg sm:text-xl"></i>
@@ -905,8 +1056,11 @@
                     <h4 class="display-font text-lg sm:text-xl font-bold mb-6">Služby</h4>
                     <ul class="space-y-3">
                         <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base footer-link">Osobní trénink</a></li>
-                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base footer-link">Výživové poradenství</a></li>
-                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base footer-link">Online koučování</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base footer-link">Tréninkový plán</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base footer-link">Jídelní plán</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base footer-link">Coaching</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base footer-link">Příprava na závody</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300 font-medium text-sm sm:text-base footer-link">Konzultace</a></li>
                     </ul>
                 </div>
                 
@@ -914,7 +1068,7 @@
                     <h4 class="display-font text-lg sm:text-xl font-bold mb-6">Kontakt</h4>
                     <ul class="space-y-3">
                         <li class="flex items-center space-x-3">
-                            <i class="fas fa-phone text-primary-400 floating"></i>
+                            <i class="fas fa-phone text-primary-400"></i>
                             <span class="text-gray-400 font-medium text-sm sm:text-base">+420 778 704 560</span>
                         </li>
                         <li class="flex items-center space-x-3">
@@ -935,43 +1089,6 @@
         </div>
     </footer>
 
-    <?php
-    // Sledování návštěv
-    require_once 'track_visit.php';
-    
-    // Databázové připojení pro sledování
-    $db_config = [
-        'host' => '92.113.22.82',
-        'dbname' => 'u498377835_adampreis',
-        'username' => 'u498377835_adampreis',
-        'password' => 'AdamPosilko67.'
-    ];
-    
-    try {
-        $pdo = new PDO(
-            "mysql:host={$db_config['host']};dbname={$db_config['dbname']};charset=utf8mb4",
-            $db_config['username'],
-            $db_config['password'],
-            [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false
-            ]
-        );
-        
-        // Sledování návštěvy hlavní stránky
-        trackVisit($pdo, 'main_page');
-        
-        // Aktualizace statistik
-        updateDailyStats($pdo);
-        updateMonthlyStats($pdo);
-        
-    } catch (Exception $e) {
-        // Tichá chyba - nechceme přerušit zobrazení stránky
-        error_log("Chyba při sledování návštěvy: " . $e->getMessage());
-    }
-    ?>
-    
     <script>
         // Mobile menu functionality
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
