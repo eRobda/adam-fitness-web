@@ -121,10 +121,14 @@ $contactSubmissions = getContactSubmissions($pdo);
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#ed7a1a">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="AP Dashboard">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="AP Dashboard">
+    
+    <!-- iOS Status Bar Color Fix -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -274,6 +278,21 @@ $contactSubmissions = getContactSubmissions($pdo);
             background: linear-gradient(90deg, #ed7514, #f1943a);
             z-index: 9999;
             transition: width 0.3s ease;
+        }
+        
+        /* iOS Status Bar Fix */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+        
+        /* iOS PWA Status Bar */
+        @media screen and (display-mode: standalone) {
+            body {
+                padding-top: env(safe-area-inset-top);
+            }
         }
     </style>
 </head>

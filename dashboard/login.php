@@ -74,10 +74,14 @@ if (isset($_SESSION['user_id'])) {
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#ed7a1a">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="AP Dashboard">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="AP Dashboard">
+    
+    <!-- iOS Status Bar Color Fix -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -283,6 +287,21 @@ if (isset($_SESSION['user_id'])) {
         input:-moz-autofill {
             background-color: #3a3d4f !important;
             color: white !important;
+        }
+        
+        /* iOS Status Bar Fix */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+        
+        /* iOS PWA Status Bar */
+        @media screen and (display-mode: standalone) {
+            body {
+                padding-top: env(safe-area-inset-top);
+            }
         }
     </style>
 

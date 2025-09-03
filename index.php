@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privátní Trenér - Transformujte své tělo</title>
+    <title>Privátní Trenér - Zdokonalte sami sebe</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -479,8 +479,8 @@
         
         <div class="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto hero-content">
             <h1 class="display-font text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black mb-8 tracking-tight leading-tight hero-title">
-                <span class="text-gradient text-reveal">TRANSFORMUJTE</span><br>
-                <span class="text-white text-reveal">SVÉ TĚLO</span>
+                <span class="text-gradient text-reveal">ZDOKONALTE</span><br>
+                <span class="text-white text-reveal">SAMI SEBE</span>
             </h1>
             <p class="text-lg sm:text-xl lg:text-2xl xl:text-3xl mb-12 text-gray-200 max-w-4xl mx-auto font-light leading-relaxed hero-subtitle">
                 Osobní trenér s <span class="text-primary-300 font-semibold">individuálním přístupem</span>. Dosáhněte svých fitness cílů s profesionálním vedením.
@@ -520,9 +520,29 @@
                 <div class="space-y-8 sm:space-y-10 animate-on-scroll">
                     <div>
                         <h3 class="display-font text-2xl sm:text-3xl font-bold text-white mb-6 tracking-tight">Certifikovaný osobní trenér</h3>
-                        <p class="text-base sm:text-lg text-gray-300 leading-relaxed">
-                            Mám více než <span class="font-semibold text-primary-400">5 let zkušeností</span> v oblasti fitness a osobního tréninku. Specializuji se na individuální přístup ke každému klientovi, protože věřím, že každý má jiné cíle a potřeby.
+                        <p class="text-base sm:text-lg text-gray-300 leading-relaxed mb-6">
+                            Ahoj, jmenuji se <span class="text-primary-400 font-semibold">Adam</span> a věnuji se fitness několik let. Věnoval jsem se převážně <span class="text-primary-400 font-semibold">silovému trojboji</span>, ale nyní přecházím spíše ke <span class="text-primary-400 font-semibold">kulturistice</span>. Nicméně mě zajímá fitness celkově.
                         </p>
+                        
+                        <div class="bg-gray-800/50 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm">
+                            <h4 class="text-primary-400 font-semibold text-lg mb-4 flex items-center">
+                                <i class="fas fa-trophy text-primary-400 mr-3"></i>
+                                Moje úspěchy
+                            </h4>
+                            <p class="text-base sm:text-lg text-gray-300 leading-relaxed mb-4">
+                                K mým největším úspěchům patří <span class="text-primary-400 font-semibold">druhé místo na Mistrovství České Republiky v benchi</span>, které se mi podařilo vybojovat <span class="text-primary-400 font-semibold">třikrát</span>. Mám za sebou přes <span class="text-primary-400 font-semibold">10 závodů</span> a také nějaké úspěchy.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gray-800/50 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm mt-6">
+                            <h4 class="text-primary-400 font-semibold text-lg mb-4 flex items-center">
+                                <i class="fas fa-heart text-primary-400 mr-3"></i>
+                                Proč jsem trenérem
+                            </h4>
+                            <p class="text-base sm:text-lg text-gray-300 leading-relaxed">
+                                Vždy jsem chtěl pomáhat ostatním v dosažení jejich cílů a předat jim své znalosti, proto jsem se stal <span class="text-primary-400 font-semibold">fitness trenérem</span>. Sám jsem ale pod vedením profesionálního trenéra.
+                            </p>
+                        </div>
                     </div>
                     
                     <div class="grid grid-cols-3 gap-4 sm:gap-8">
@@ -540,11 +560,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-gray-800 rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-700 card-hover">
+
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-br from-gray-800 to-gray-700 rounded-3xl relative overflow-hidden border border-gray-600 animate-on-scroll">
+                        <div class="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-transparent"></div>
+                        <div class="relative w-full h-full">
+                            <img src="IMG_9528.JPG" alt="Osobní trenér" class="w-full h-full object-cover rounded-3xl">
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-700 card-hover animate-on-scroll">
                         <h4 class="display-font text-lg sm:text-xl font-bold text-white mb-6 tracking-tight">Odbornost</h4>
                         <ul class="space-y-4">
                             <li class="flex items-center space-x-4">
-                                <div class="w-8 h-8 bg-primary-500/20 rounded-full flex items-center justify-center floating">
+                                <div class="w-8 h-8 bg-primary-500/20 rounded-full flex items-center justify-center">
                                     <i class="fas fa-certificate text-primary-400 text-sm"></i>
                                 </div>
                                 <span class="text-gray-200 font-medium text-sm sm:text-base">Profesionální osobní trenér</span>
@@ -562,12 +592,6 @@
                                 <span class="text-gray-200 font-medium text-sm sm:text-base">Funkční trénink</span>
                             </li>
                         </ul>
-                    </div>
-                </div>
-                <div class="bg-gradient-to-br from-gray-800 to-gray-700 rounded-3xl relative overflow-hidden border border-gray-600 animate-on-scroll">
-                    <div class="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-transparent"></div>
-                    <div class="relative w-full h-full">
-                        <img src="IMG_9528.JPG" alt="Osobní trenér" class="w-full h-full object-cover rounded-3xl">
                     </div>
                 </div>
             </div>
