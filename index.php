@@ -876,14 +876,36 @@ try {
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                         </div>
-                        <p class="text-gray-300 italic text-base sm:text-lg leading-relaxed">"Díky osobnímu přístupu jsem dosáhl svých cílů rychleji, než jsem čekal. Profesionální a motivující přístup!"</p>
+                        <p class="text-gray-300 italic text-base sm:text-lg leading-relaxed">"Doporučuji trenéra, který se ke každému chová s pokorou a respektem a rád pomůže se životním stylem i dosahováním cílů."</p>
                     </div>
                     <div class="flex items-center">
                         <div class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mr-4">
                             <i class="fas fa-user text-white text-lg sm:text-xl"></i>
                         </div>
                         <div>
-                            <h4 class="display-font font-bold text-white text-base sm:text-lg">Petr Novák</h4>
+                            <h4 class="display-font font-bold text-white text-base sm:text-lg">Jan Puš</h4>
+                            <span class="text-gray-400 font-medium text-sm sm:text-base">Klient 1 rok</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700 testimonial-card animate-on-scroll">
+                    <div class="mb-6 sm:mb-8">
+                        <div class="flex text-primary-400 mb-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-gray-300 italic text-base sm:text-lg leading-relaxed">"Adam ve mně jeho přístupem dokázal vzbudit neskutečný zápal pro sport - trojboj a naučil mě, jaké to je sport milovat. Naučil mě vše od úplného začátku a do všeho se zájmem věnoval maximum své energie. Díky němu jsem dosáhla všech svých cílů."</p>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-white text-lg sm:text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="display-font font-bold text-white text-base sm:text-lg">Klára</h4>
                             <span class="text-gray-400 font-medium text-sm sm:text-base">Klient 2 roky</span>
                         </div>
                     </div>
@@ -898,37 +920,15 @@ try {
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                         </div>
-                        <p class="text-gray-300 italic text-base sm:text-lg leading-relaxed">"Konečně jsem našla trenéra, který rozumí mým potřebám. Výsledky jsou viditelné už po prvním měsíci!"</p>
+                        <p class="text-gray-300 italic text-base sm:text-lg leading-relaxed">"Díky Adamovy jsem se naučil základy a teď jsem tam kde jsem jen díky němu"</p>
                     </div>
                     <div class="flex items-center">
                         <div class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mr-4">
                             <i class="fas fa-user text-white text-lg sm:text-xl"></i>
                         </div>
                         <div>
-                            <h4 class="display-font font-bold text-white text-base sm:text-lg">Marie Svobodová</h4>
-                            <span class="text-gray-400 font-medium text-sm sm:text-base">Klientka 1 rok</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-10 card-hover border border-gray-700 testimonial-card animate-on-scroll">
-                    <div class="mb-6 sm:mb-8">
-                        <div class="flex text-primary-400 mb-4">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <p class="text-gray-300 italic text-base sm:text-lg leading-relaxed">"Online koučování mi perfektně vyhovuje. Flexibilní rozvrh a stejně kvalitní výsledky jako při osobních trénincích."</p>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mr-4">
-                            <i class="fas fa-user text-white text-lg sm:text-xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="display-font font-bold text-white text-base sm:text-lg">Jan Dvořák</h4>
-                            <span class="text-gray-400 font-medium text-sm sm:text-base">Online klient</span>
+                            <h4 class="display-font font-bold text-white text-base sm:text-lg">Dušan</h4>
+                            <span class="text-gray-400 font-medium text-sm sm:text-base">Klient 2 roky</span>
                         </div>
                     </div>
                 </div>
